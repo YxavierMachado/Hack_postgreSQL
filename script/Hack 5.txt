@@ -1,0 +1,94 @@
+create table countries(
+  id_country serial primary key,
+  name varchar(50) not null
+);
+
+create table roles(
+  id_role integer primary key,
+  name varchar(50) not null
+);
+
+create table taxes(
+  id_tax serial primary key,
+  percentage integer not null
+);
+
+create table offers(
+  id_offer serial primary key,
+  status boolean not null
+);
+
+create table discounts(
+  id_discount serial primary key,
+  status boolean not null,
+  percentage integer not null
+);
+
+create table payments(
+  id_payment serial primary key, 
+  type_payment varchar(50) not null
+);
+
+create table customers(
+  email varchar(100) primary key,
+  id_country integer not null,
+  id_role integer not null,
+  name varchar(50) not null,
+  age integer check(age >= 18) not null,
+  password varchar(15) not null,
+  physical_address text not null,
+  foreign key (id_role) references roles(id_role) on delete cascade,
+  foreign key (id_country) references countries(id_country)
+);
+
+create table invoice_status(
+  id_invoice_status serial primary key, 
+  status boolean not null
+);
+
+create table products(
+  id_product serial primary key, 
+  id_discount integer not null, 
+  id_offer integer not null, 
+  id_tax integer not null, 
+  name varchar(50) not null,
+  details text not null,
+  minimun_stock integer not null,
+  maximun_stock integer not null,
+  current_stock integer not null,
+  price integer not null,
+  price_with_tax integer not null,
+  foreign key (id_tax) references taxes(id_tax),
+  foreign key (id_offer) references offers(id_offer),
+  foreign key (id_discount) references discounts(id_discount)
+);
+
+create table products_customers(
+  id_product integer not null, 
+  id_customer varchar(100) not null,
+  foreign key (id_product) references products(id_product),
+  foreign key (id_customer) references customers(email) on delete cascade
+);
+
+create table invoices(
+  id_invoice serial primary key, 
+  id_customer varchar(100) not null,
+  id_payment integer not null,
+  id_invoice_status integer not null,
+  date_invoice varchar(100) not null,
+  total_to_pay integer not null,
+  foreign key (id_customer) references customers(email) on delete cascade,
+  foreign key (id_payment) references payments(id_payment),
+  foreign key (id_invoice_status) references invoice_status(id_invoice_status)
+);
+
+create table orders(
+  id_order serial primary key, 
+  id_invoice integer not null, 
+  id_product integer not null, 
+  detail text not null, 
+  amount integer not null, 
+  price integer not null,
+  foreign key (id_product) references products(id_product),
+  foreign key (id_invoice) references invoices(id_invoice) on delete cascade
+);

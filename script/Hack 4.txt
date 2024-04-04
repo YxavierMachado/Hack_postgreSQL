@@ -1,0 +1,22 @@
+insert into countries (name)
+values ('Spain'), ('Germany'), ('Ireland'), ('Canada'), ('Holland');
+select * from countries;
+
+insert into priorities (type_name) values ('type A');
+insert into priorities (type_name) values ('type B');
+insert into priorities (type_name) values ('type C');
+select * from priorities;
+
+insert into contact_request 
+(id_email, id_country, id_priority, name, detail, physical_address)
+values
+('yxa@gmail.com',1,1,'Yxavier','music producer','Pozuelo de Alarcon #1'),
+('manu@gmail.com',2,2,'Manuel','engineer','Valverde Segovia #2'),
+('bran@gmail.com',3,3,'Brandon','musician','Berlin #3');
+select * from contact_request;
+
+delete from contact_request where id_email = 'bran@gmail.com';
+
+update contact_request set detail = 'sound producer',
+physical_address = 'Madrid #44' where id_email = 'yxa@gmail.com';
+select * from contact_request;
